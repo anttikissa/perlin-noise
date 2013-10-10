@@ -5,6 +5,10 @@ var m_w = 123456789;
 var m_z = 987654321;
 var mask = 0xffffffff;
 
+function seed(i) {
+	m_w = i;
+}
+
 function random()
 {
     m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
@@ -12,6 +16,13 @@ function random()
     var result = ((m_z << 16) + m_w) & mask;
 	result /= 4294967296;
 	return result + 0.5;
+}
+
+idx = 0;
+
+function random2() {
+	result = '0.' + Math.sin(idx++).toString().substr(6);
+	return Number(result);
 }
 
 function rgb(r, g, b, x, y) {
@@ -28,7 +39,20 @@ function gray(g, x, y) {
 
 for (var i = 0; i < 100; i++) {
 	for (var j = 0; j < 100; j++) {
-//		gray(random(), i, j);
-		gray(1, random() * 180 + 10, random() * 180 + 10);
+		gray(random2(), i, j);
 	}
 }
+
+function measure(what) {
+	var start = new Date();
+	var iters = 1000000;
+	for (var k = 0; k < iters; k++) {
+		what();
+	}
+	var end = new Date();
+	console.log(what.name + " " + (end - start) * 1000 / iters + " us");
+}
+
+measure(random);
+measure(Math.random);
+measure(random2);
