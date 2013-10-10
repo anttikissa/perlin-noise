@@ -13,10 +13,8 @@ function gray(g, x, y) {
 	rgb(g, g, g, x, y);
 }
 
-rgb(0, .9, .5, 50, 50);
-
-gray(.1, 0, 0);
-gray(.2, 0, 1);
-gray(.3, 1, 2);
-gray(.4, 1, 3);
-gray(.5, 2, 3);
+for (var i = 0; i < 100; i++) {
+	for (var j = 0; j < 100; j++) {
+		gray(Math.random(), i, j);
+	}
+}
