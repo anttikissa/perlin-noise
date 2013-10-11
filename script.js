@@ -18,12 +18,17 @@ function random()
 	return result + 0.5;
 }
 
-idx = 0;
+var idx = 0;
 
-function random2() {
-	result = '0.' + Math.sin(idx++).toString().substr(6);
+var idx2 = 0;
+function random3() {
+	var result = '0.' + Math.sin(idx2++).toString().substr(6);
 	return Number(result);
 }
+
+console.log("random3", random3(), random3(), random3());
+console.log("random3", random3(), random3(), random3());
+console.log("random3", random3(), random3(), random3());
 
 function rgb(r, g, b, x, y) {
 	ctx.fillStyle = 'rgb('
@@ -37,9 +42,18 @@ function gray(g, x, y) {
 	rgb(g, g, g, x, y);
 }
 
+function random2() {
+	var x = Math.sin(idx++) * 10000;
+	return x - Math.floor(x);
+}
+
+console.log("random2", random2(), random2(), random2());
+console.log("random2", random2(), random2(), random2());
+console.log("random2", random2(), random2(), random2());
+
 for (var i = 0; i < 100; i++) {
 	for (var j = 0; j < 100; j++) {
-		gray(random2(), i, j);
+		rgb(0, 1, 0, random2() * 280 + 10, random2() * 280 + 10);
 	}
 }
 
@@ -56,3 +70,4 @@ function measure(what) {
 measure(random);
 measure(Math.random);
 measure(random2);
+measure(random3);
