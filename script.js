@@ -32,8 +32,13 @@ function random()
 	return result + 0.5;
 }
 
+// This is twice as fast as Math.random
+function constRandom() {
+	return 0.4;
+}
+
 // This is roughly competitive, speed-wise, with Math.random
-// But not very good...
+// But not random at all (mostly as a benchmark)
 var x = 0;
 function base() {
 	x += 1234567;
@@ -57,9 +62,10 @@ function random3() {
 	return x - Math.floor(x);
 }
 
+var rnd = constRandom;
 // Populate box with pixels to verify the randomness
 for (var i = 0; i < 10000; i++) {
-	rgb(0, 1, 0, base() * 280 + 10, random2() * 280 + 10);
+	rgb(0, 1, 0, rnd() * 280 + 10, rnd() * 280 + 10);
 }
 
 // Measure speed of `what`
@@ -73,10 +79,11 @@ function measure(what) {
 	console.log(what.name + " " + (end - start) * 1000 / iters + " us");
 }
 
-if (0) {
+if (1) {
+	measure(constRandom);
 	measure(base);
 	measure(random);
 	measure(Math.random);
-	//measure(random2);
+	measure(random2);
 	measure(random3);
 }
