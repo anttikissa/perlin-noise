@@ -79,7 +79,7 @@ function measure(what) {
 	console.log(what.name + " " + (end - start) * 1000 / iters + " us");
 }
 
-if (1) {
+if (0) {
 	measure(constRandom);
 	measure(base);
 	measure(random);
