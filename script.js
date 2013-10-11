@@ -1,6 +1,20 @@
 var ctx = document.querySelector('canvas').getContext('2d');
 ctx.fillRect(0, 0, 2000, 2000);
 
+function rgb(r, g, b, x, y) {
+	ctx.fillStyle = 'rgb('
+		+ Math.round(255 * r) + ', '
+		+ Math.round(255 * g) + ', '
+		+ Math.round(255 * b) + ')';
+	ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
+}
+
+function gray(g, x, y) {
+	rgb(g, g, g, x, y);
+}
+
+// This came from Wikipedia (page "random number generation")
+// and is about 2 times slower than Math.random
 var m_w = 123456789;
 var m_z = 987654321;
 var mask = 0xffffffff;
@@ -18,45 +32,37 @@ function random()
 	return result + 0.5;
 }
 
-var idx = 0;
+// This is roughly competitive, speed-wise, with Math.random
+// But not very good...
+var x = 0;
+function base() {
+	x += 1234567;
+	x %= 1000000;
+	return x / 1000000;
+}
 
-var idx2 = 0;
-function random3() {
-	var result = '0.' + Math.sin(idx2++).toString().substr(6);
+
+// This is from Stack Overflow, nice but slow (50x Math.random)
+var idx = 0;
+function random2() {
+	var result = '0.' + Math.sin(idx++).toString().substr(6);
 	return Number(result);
 }
 
-console.log("random3", random3(), random3(), random3());
-console.log("random3", random3(), random3(), random3());
-console.log("random3", random3(), random3(), random3());
-
-function rgb(r, g, b, x, y) {
-	ctx.fillStyle = 'rgb('
-		+ Math.round(255 * r) + ', '
-		+ Math.round(255 * g) + ', '
-		+ Math.round(255 * b) + ')';
-	ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
-}
-
-function gray(g, x, y) {
-	rgb(g, g, g, x, y);
-}
-
-function random2() {
-	var x = Math.sin(idx++) * 10000;
+// This is an optimized version, more precise and faster
+// (only 2.5x slower than Math.random)
+var idx2 = 0;
+function random3() {
+	var x = Math.sin(idx2++) * 10000;
 	return x - Math.floor(x);
 }
 
-console.log("random2", random2(), random2(), random2());
-console.log("random2", random2(), random2(), random2());
-console.log("random2", random2(), random2(), random2());
-
-for (var i = 0; i < 100; i++) {
-	for (var j = 0; j < 100; j++) {
-		rgb(0, 1, 0, random2() * 280 + 10, random2() * 280 + 10);
-	}
+// Populate box with pixels to verify the randomness
+for (var i = 0; i < 10000; i++) {
+	rgb(0, 1, 0, base() * 280 + 10, random2() * 280 + 10);
 }
 
+// Measure speed of `what`
 function measure(what) {
 	var start = new Date();
 	var iters = 1000000;
@@ -67,7 +73,10 @@ function measure(what) {
 	console.log(what.name + " " + (end - start) * 1000 / iters + " us");
 }
 
-measure(random);
-measure(Math.random);
-measure(random2);
-measure(random3);
+if (0) {
+	measure(base);
+	measure(random);
+	measure(Math.random);
+	//measure(random2);
+	measure(random3);
+}
