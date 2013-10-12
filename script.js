@@ -1,5 +1,5 @@
 var ctx = document.querySelector('canvas').getContext('2d');
-ctx.fillRect(0, 0, 2000, 2000);
+ctx.fillRect(0, 0, 200, 200);
 
 function rgb(r, g, b, x, y) {
 	ctx.fillStyle = 'rgb('
@@ -22,8 +22,10 @@ function random() {
 }
 
 // Populate box with pixels to verify the randomness
-for (var i = 0; i < 10000; i++) {
-	rgb(0, 1, 0, random() * 280 + 10, random() * 280 + 10);
+for (var i = 0; i < 100; i++) {
+	for (var j = 0; j < 100; j++) {
+		gray(random(), i, j);
+	}
 }
 
 // Measure speed of `what`
